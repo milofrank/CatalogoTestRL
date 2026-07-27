@@ -1,12 +1,15 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
+
+// Envolvemos el await para evitar el error de top-level await en CJS
+if (process.env.NODE_ENV === 'development') {
+  (async () => {
+    await setupDevPlatform();
+  })();
+}
 
 const nextConfig: NextConfig = {
-	/* config options here */
+  /* opciones de configuración de Next.js si las necesitas */
 };
 
 export default nextConfig;
-
-// Enable calling `getCloudflareContext()` in `next dev`.
-// See https://opennext.js.org/cloudflare/bindings#local-access-to-bindings.
-import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
-initOpenNextCloudflareForDev();
