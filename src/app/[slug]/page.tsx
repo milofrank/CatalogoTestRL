@@ -1,4 +1,5 @@
-import { getRequestContext } from '@cloudflare/next-on-pages';
+// 1. Cambiamos la importación antigua por la nueva de OpenNext
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { drizzle } from 'drizzle-orm/d1';
 import { eq } from 'drizzle-orm';
 import { negocios, productos } from '@/db/schema';
@@ -8,16 +9,22 @@ export const runtime = 'edge';
 export default async function TenantPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  const env = getRequestContext().env as { DB?: any; base_catalogos?: any };
-  const d1Binding = env.DB || env.base_catalogos;
+  // 2. Usamos el nuevo método asíncrono para obtener el entorno de Cloudflare
+  const { env } = await getCloudflareContext();
+  const d1Binding = (env as any).DB || (env as any).base_catalogos;
 
   if (!d1Binding) {
-    return <div className="p-10 text-center text-red-500">Error: Base de datos no conectada.</div>;
+    return (
+      <div className="flex h-screen items-center justify-center p-6 text-center text-red-500">
+        Error: No se encontró la conexión a la base de datos D1. Revisa tu wrangler.toml.
+      </div>
+    );
   }
 
+  // 3. Inicializamos Drizzle con el binding
   const db = drizzle(d1Binding);
 
-  // 1. Buscar el negocio
+  // Buscar el negocio
   const negocio = await db.select().from(negocios).where(eq(negocios.slug, slug)).get();
 
   if (!negocio) {
@@ -28,19 +35,17 @@ export default async function TenantPage({ params }: { params: Promise<{ slug: s
     );
   }
 
-  // 2. Buscar todos los productos que pertenecen a este negocio
+  // Buscar los productos
   const listaProductos = await db.select().from(productos).where(eq(productos.negocioId, negocio.id));
 
   return (
     <main className="min-h-screen bg-slate-50 p-6 font-sans sm:p-12">
       <div className="mx-auto max-w-4xl">
-        {/* Encabezado del Negocio */}
         <header className="mb-8 rounded-3xl bg-white p-8 text-center shadow-sm border border-slate-100">
           <h1 className="text-4xl font-bold text-slate-800">{negocio.nombre}</h1>
           <p className="mt-2 text-sm text-slate-400">Menú & Catálogo Digital</p>
         </header>
 
-        {/* Lista / Grid de Productos */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {listaProductos.length === 0 ? (
             <p className="col-span-full text-center text-slate-400">No hay productos disponibles por ahora.</p>
