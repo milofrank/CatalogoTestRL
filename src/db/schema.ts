@@ -1,14 +1,19 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
 export const negocios = sqliteTable('negocios', {
-  id: text('id').primaryKey(),
-  slug: text('slug').notNull().unique(),
+  id: integer('id').primaryKey({ autoIncrement: true }),
   nombre: text('nombre').notNull(),
+  slug: text('slug').notNull().unique(),
 });
 
+// 2. Tabla de Productos (Relacionada con Negocios)
 export const productos = sqliteTable('productos', {
-  id: text('id').primaryKey(),
-  negocio_id: text('negocio_id').references(() => negocios.id),
-  data_json: text('data_json'), // Aquí va todo tu objeto JSON flexible
-  activo: integer('activo').default(1),
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  negocioId: integer('negocio_id')
+    .notNull()
+    .references(() => negocios.id), // Enlace con el negocio dueño
+  nombre: text('nombre').notNull(),
+  descripcion: text('descripcion'),
+  precio: integer('precio').notNull(), // Guardamos precios en valores enteros
+  categoria: text('categoria'),
 });
