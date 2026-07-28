@@ -6,7 +6,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "micatalogotest",
 	"compatibility_date": "2026-07-26",
-	"main": ".open-next/worker/index.mjs",
+	"main": ".open-next/worker.js",
   	"assets": {
     "binding": "ASSETS",
     "directory": ".open-next/assets"
