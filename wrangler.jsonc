@@ -5,7 +5,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "micatalogotest",
-	"main": "src/index.ts",
+	
 	"compatibility_date": "2026-07-26",
 	"observability": {
 		"enabled": true
