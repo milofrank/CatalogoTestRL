@@ -1,28 +1,22 @@
-// 1. Cambiamos la importación antigua por la nueva de OpenNext
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { drizzle } from 'drizzle-orm/d1';
 import { eq } from 'drizzle-orm';
 import { negocios, productos } from '@/db/schema';
 
-export const runtime = 'edge';
+export const dynamic = 'force-dynamic'; 
 
-export default async function TenantPage({ params }: { params: Promise<{ slug: string }> }) {
+
+export default async function TenantPage({ 
+  params 
+}: { 
+  params: Promise<{ slug: string }> 
+}) {
   const { slug } = await params;
 
   // 2. Usamos el nuevo método asíncrono para obtener el entorno de Cloudflare
-  const { env } = await getCloudflareContext();
-  const d1Binding = (env as any).DB || (env as any).base_catalogos;
+  const { env } = await getCloudflareContext({ async: true }); // 👈 async: true
+  const db = drizzle(env.DB);
 
-  if (!d1Binding) {
-    return (
-      <div className="flex h-screen items-center justify-center p-6 text-center text-red-500">
-        Error: No se encontró la conexión a la base de datos D1. Revisa tu wrangler.toml.
-      </div>
-    );
-  }
-
-  // 3. Inicializamos Drizzle con el binding
-  const db = drizzle(d1Binding);
 
   // Buscar el negocio
   const negocio = await db.select().from(negocios).where(eq(negocios.slug, slug)).get();
