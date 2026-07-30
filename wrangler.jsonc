@@ -24,8 +24,14 @@
 			"database_name": "base-catalogos",
 			"database_id": "6306c47a-b6e5-4a49-b6b7-9a25c85dd8ed"
 		  }
-		]
-	  
+		],
+  "r2_buckets": [
+    {
+      "binding": "CATALOGO_IMAGENES",
+      "bucket_name": "catalogo-imagenes"
+    }
+  ]
+
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement

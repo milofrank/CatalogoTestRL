@@ -1,0 +1,8 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "opencode/ling-3.0-flash-free",
+  "permission": {
+    "bash": "ask",
+    "edit": "ask"
+  }
+}
