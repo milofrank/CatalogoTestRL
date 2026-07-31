@@ -15,6 +15,13 @@
       "when": 1785185431211,
       "tag": "0001_fixed_agent_brand",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1785449762519,
+      "tag": "0002_supreme_union_jack",
+      "breakpoints": true
     }
   ]
 }

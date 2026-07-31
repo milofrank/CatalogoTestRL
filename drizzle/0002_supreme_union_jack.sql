@@ -1,0 +1,1 @@
+ALTER TABLE `productos` ADD `imagen_key` text;

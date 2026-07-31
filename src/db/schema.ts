@@ -16,4 +16,5 @@ export const productos = sqliteTable('productos', {
   descripcion: text('descripcion'),
   precio: integer('precio').notNull(), // Guardamos precios en valores enteros
   categoria: text('categoria'),
+  imagenKey: text('imagen_key'),
 });
